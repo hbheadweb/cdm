@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HBchat</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ccc;
+    }
+    .chat-container {
+        width: 90%;
+        max-width: 600px; /* Limit maximum width */
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .chat-box {
+        height: 80vh; /* 80% of viewport height */
+        overflow-y: scroll;
+        padding: 10px;
+        background-color: #fff;
+    }
+    .user-message {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #e6f2ff;
+        border-radius: 5px;
+        align-self: flex-end;
+    }
+    .bot-message {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+    }
+    .user-input {
+        width: calc(100% - 70px); /* Adjusted width to accommodate send button */
+        padding: 10px;
+        border: none;
+        border-top: 1px solid #ccc;
+        font-size: 16px;
+    }
+    .send-button {
+        width: 60px;
+        padding: 10px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-box" id="chat-box">
+        <div class="bot-message">HBchat: Hello! How can I help you today?</div>
+    </div>
+    <div style="display: flex;">
+        <input type="text" class="user-input" id="user-input" placeholder="Type your message...">
+        <button class="send-button" onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+document.getElementById("user-input").addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
+
+function sendMessage() {
+    var userMessage = document.getElementById("user-input").value;
+    if (userMessage.trim() === "") return;
+
+    appendUserMessage(userMessage);
+    document.getElementById("user-input").value = "";
+
+    setTimeout(function() {
+        var botReply = getBotReply(userMessage);
+        appendBotMessage(botReply);
+    }, 500);
+}
+
+function appendUserMessage(message) {
+    var chatBox = document.getElementById("chat-box");
+    var messageElement = document.createElement("div");
+    messageElement.className = "user-message";
+    messageElement.innerHTML = "You: " + message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function appendBotMessage(message) {
+    var chatBox = document.getElementById("chat-box");
+    var messageElement = document.createElement("div");
+    messageElement.className = "bot-message";
+    messageElement.innerHTML = "HBchat: " + message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function getBotReply(userMessage) {
+    var greetings = ["hello", "hi", "hey", "howdy", "hola"];
+    var farewells = ["goodbye", "bye", "see you later", "take care"];
+    var questions = ["how are you?", "what's up?", "how's your day?"];
+    var a = ["who is your creator?"];
+    var responses = {
+        "greetings": ["Hello!", "Hi there!", "Hey!"],
+        "farewells": ["Goodbye!", "See you later!", "Take care!"],
+        "questions": ["I'm doing well, thank you!", "Not much, just chatting with you!", "My day is going great!"],
+        "a": ["Hasib"]
+    };
+
+    userMessage = userMessage.toLowerCase().trim();
+    if (greetings.includes(userMessage)) {
+        return responses["greetings"][Math.floor(Math.random() * responses["greetings"].length)];
+    } else if (farewells.includes(userMessage)) {
+        return responses["farewells"][Math.floor(Math.random() * responses["farewells"].length)];
+    } else if (questions.includes(userMessage)) {
+        return responses["questions"][Math.floor(Math.random() * responses["questions"].length)];
+    } else if (a.includes(userMessage)) {
+        return responses["a"][Math.floor(Math.random() * responses["a"].length)];    
+    } else {
+        return "Sorry, I didn't understand that.";
+    }
+}
+</script>
+
+</body>
+</html>
